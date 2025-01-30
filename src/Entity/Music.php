@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\MusicRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: MusicRepository::class)]
 class Music
@@ -11,24 +13,31 @@ class Music
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['music:get-one'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['music:get-one'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['music:get-one'])]
     private ?string $storagePath = null;
 
     #[ORM\ManyToOne(inversedBy: 'music')]
+    #[Groups(['music:get-one'])]
     private ?User $owner = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['music:get-one'])]
     private ?string $artist = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['music:get-one'])]
     private ?string $coverPath = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['music:get-one'])]
     private ?string $originalFilename = null;
 
     public function getId(): ?int
