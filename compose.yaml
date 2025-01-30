@@ -18,8 +18,38 @@ services:
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
+    networks:
+      - webradio-net
+
+  icecast:
+    image: pltnk/icecast2
+    container_name: icecast2
+    restart: always
+    ports:
+      - 8042:8000
+    networks:
+      - webradio-net
+
+  liquidsoap:
+    image: savonet/liquidsoap:rolling-release-v2.3.x
+    container_name: liquidsoap_test
+    volumes:
+      - ./script.liq:/script.liq:ro
+      - ./music:/music:ro
+    command: liquidsoap /script.liq
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: rebuild
+          path: ./script.liq
+    networks:
+      - webradio-net
+
 
 volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+networks:
+  webradio-net:
